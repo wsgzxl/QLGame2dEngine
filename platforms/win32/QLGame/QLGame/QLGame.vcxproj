@@ -43,12 +43,12 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>C:\项目盘\游戏引擎\qlgame\extend\FreeImage\Dist\x32;C:\项目盘\游戏引擎\qlgame\extend\opengl\glut-3.7.6-bin;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\项目盘\游戏引擎\qlgame\extend\FreeImage\Dist\x32;C:\项目盘\游戏引擎\qlgame\extend\opengl\glutdlls37beta;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\项目盘\游戏引擎\qlgame\extend\opengl\glut-3.7.6-bin;C:\项目盘\游戏引擎\qlgame\extend\FreeImage\Dist\x32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <SubSystem>Windows</SubSystem>
+      <AdditionalLibraryDirectories>C:\项目盘\游戏引擎\qlgame\extend\opengl\glutdlls37beta;C:\项目盘\游戏引擎\qlgame\extend\FreeImage\Dist\x32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <SubSystem>Console</SubSystem>
       <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
       <AdditionalDependencies>FreeImage.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
@@ -70,11 +70,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="FPS.cpp" />
     <ClCompile Include="QLGame.cpp" />
     <ClCompile Include="SpriteBatch.cpp" />
     <ClCompile Include="TextureManager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Core.h" />
+    <ClInclude Include="FPS.h" />
     <ClInclude Include="SpriteBatch.h" />
     <ClInclude Include="TextureManager.h" />
   </ItemGroup>

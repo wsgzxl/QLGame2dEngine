@@ -1,15 +1,14 @@
-//**********************************************
-//Singleton Texture Manager class
-//Written by Ben English
-//benjamin.english@oit.edu
-//
-//For use with OpenGL and the FreeImage library
-//**********************************************
+/*
+   author:weixin wsgzxl
+   email:1357098586@qq.com
+   edit time:2015.3.19
+*/
 
 #include "TextureManager.h"
-
+//静态实例，单例对象
 TextureManager* TextureManager::m_inst(0);
 
+//静态方法
 TextureManager* TextureManager::Inst()
 {
 	if(!m_inst)
@@ -26,10 +25,6 @@ TextureManager::TextureManager()
 	#endif
 }
 
-//these should never be called
-//TextureManager::TextureManager(const TextureManager& tm){}
-//TextureManager& TextureManager::operator=(const TextureManager& tm){}
-	
 TextureManager::~TextureManager()
 {
 	// call this ONLY when linking with FreeImage as a static library
@@ -41,9 +36,14 @@ TextureManager::~TextureManager()
 	m_inst = 0;
 }
 
-bool TextureManager::LoadTexture(const char* filename, const unsigned int texID, GLenum image_format, GLint internal_format, GLint level, GLint border)
+/*
+   LoadTexture:载入贴图
+   filename:载入贴图的文件名
+   image_format:贴图格式 如果不指定，默认为RGB
+*/
+GLuint TextureManager::LoadTexture(const char* filename,ImageSize* imagesize, GLenum image_format, GLint internal_format, GLint level, GLint border)
 {
-	GLuint tex = 0;  
+	GLuint tex = -1;  
     int tmp_bit;  
     int i;  
     int w, h;  
@@ -70,18 +70,35 @@ bool TextureManager::LoadTexture(const char* filename, const unsigned int texID,
     glbmp = FIBitmap2GLBitmap(bitmap);  
     if ( !glbmp )  
         return 0;  
-  
     glGenTextures(1, &tex);  
+	printf("gentextureid:%d",tex);
     glBindTexture(GL_TEXTURE_2D, tex);  
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);  
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);  
     glTexImage2D(GL_TEXTURE_2D, 0, glbmp->rgb_mode, glbmp->w, glbmp->h, 0, glbmp->rgb_mode, GL_UNSIGNED_BYTE, glbmp->buf);  
-      
+	imagesize->width=glbmp->w;
+	imagesize->heigth=glbmp->h;
 	FreeGLBitmap(glbmp);
     FreeImage_Unload(bitmap);     
-  
-    return tex;  
+	m_texID.insert(std::pair<std::string, GLuint>(filename,tex));
+	return tex;
 }
+
+bool TextureManager::exist(std::string filename,GLuint* texid)
+{
+	std::map<std::string, GLuint>::iterator i = m_texID.begin();
+	while(i != m_texID.end())
+	{
+		if(i->first==filename)
+		{
+			*texid=i->second;
+			return true;
+		}
+	}
+	return false;
+}
+
+//对图片数据进行处理，以适合opengl显示
 GLBITMAP* TextureManager::FIBitmap2GLBitmap(FIBITMAP *fibmp)  
 {  
     int i, j, k;  
@@ -138,8 +155,9 @@ GLBITMAP* TextureManager::FIBitmap2GLBitmap(FIBITMAP *fibmp)
   
     return glbmp;  
 }  
-bool TextureManager::UnloadTexture(const unsigned int texID)
+bool TextureManager::UnloadTexture(std::string texID)
 {
+	printf("%s","unloadtexture");
 	bool result(true);
 	//if this texture ID mapped, unload it's texture, and remove it from the map
 	if(m_texID.find(texID) != m_texID.end())
@@ -162,23 +180,11 @@ void TextureManager::FreeGLBitmap(GLBITMAP *glbmp)
         free(glbmp);  
     }  
 }  
-bool TextureManager::BindTexture(const unsigned int texID)
-{
-	bool result(true);
-	//if this texture ID mapped, bind it's texture as current
-	if(m_texID.find(texID) != m_texID.end())
-		glBindTexture(GL_TEXTURE_2D, m_texID[texID]);
-	//otherwise, binding failed
-	else
-		result = false;
-
-	return result;
-}
-
 void TextureManager::UnloadAllTextures()
 {
+	printf("unload all texture");
 	//start at the begginning of the texture map
-	std::map<unsigned int, GLuint>::iterator i = m_texID.begin();
+	std::map<std::string, GLuint>::iterator i = m_texID.begin();
 
 	//Unload the textures untill the end of the texture map is found
 	while(i != m_texID.end())

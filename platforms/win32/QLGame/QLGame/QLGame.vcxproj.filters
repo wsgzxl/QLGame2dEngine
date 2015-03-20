@@ -24,12 +24,21 @@
     <ClCompile Include="SpriteBatch.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="FPS.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="TextureManager.h">
-      <Filter>源文件</Filter>
+    <ClInclude Include="FPS.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Core.h">
+      <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="SpriteBatch.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureManager.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
