@@ -3,7 +3,7 @@
 
 FPS::FPS(void)
 {
-	this->show=false;
+	
 }
 FPS::~FPS(void)
 {
@@ -16,22 +16,21 @@ int FPS::getframefps()
 
 void FPS::Start()
 {
-	if(!show) return;
 	_start=true;
 	_framecount=0;
-	_starttime=GetTickCount();
+	_starttime=timeGetTime();
 	_starttimecopy=_starttime;
 }
 
 void FPS::ReStart()
 {
-	if(!show) return;
-	_starttimecopy=GetTickCount();
+	_starttimecopy=timeGetTime();
 }
 
 DWORD FPS::gettick()
 {
-	return GetTickCount()-_starttimecopy;
+	int time=timeGetTime()-_starttimecopy;
+	return  time;
 }
 
 void FPS::Stop()
@@ -41,9 +40,9 @@ void FPS::Stop()
 
 void FPS::Update()
 {
-	if(!show || !_start) return;
+	if(!_start) return;
 	_framecount++;
-	if(GetTickCount()-_starttime>=1000)
+	if(timeGetTime()-_starttime>=1000)
 	{
 		time_t timenow;
 		time_t tt = time(NULL);//这句返回的只是一个时间cuo
@@ -57,14 +56,10 @@ void FPS::Update()
             t->tm_sec);
 		(*_pfunc)();
 		_framecount=0;
-		_starttime=GetTickCount();
+		_starttime=timeGetTime();
 	}
 }
 
-void FPS::ShowFps(bool showflag)
-{
-	this->show=showflag;
-}
 
 void FPS::CallBack(pfunc _pfunc)
 {

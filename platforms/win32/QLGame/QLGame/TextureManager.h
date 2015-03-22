@@ -19,6 +19,7 @@
 #include "FreeImage.h"
 #include <map>
 #include <vector>
+#include <string>
 
 //GLBITMAP结构体 
 typedef struct   
@@ -31,8 +32,8 @@ typedef struct
 
 typedef struct
 {
-	int width;
-	int heigth;
+	float width;
+	float heigth;
 }ImageSize;//图片的尺寸
 
 class TextureManager
@@ -42,7 +43,7 @@ public:
 	virtual ~TextureManager();
 
 	//载入贴图
-	GLuint LoadTexture(const char* filename,	//where to load the file from
+	GLuint LoadTexture(std::string filename,	//where to load the file from
 					//does not have to be generated with glGenTextures
 	    ImageSize* imagesize,//image size
 		GLenum image_format = GL_RGB,		//format the image is in

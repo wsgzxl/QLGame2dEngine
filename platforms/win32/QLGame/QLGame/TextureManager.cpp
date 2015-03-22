@@ -3,7 +3,7 @@
    email:1357098586@qq.com
    edit time:2015.3.19
 */
-
+#include <string>
 #include "TextureManager.h"
 //静态实例，单例对象
 TextureManager* TextureManager::m_inst(0);
@@ -41,7 +41,7 @@ TextureManager::~TextureManager()
    filename:载入贴图的文件名
    image_format:贴图格式 如果不指定，默认为RGB
 */
-GLuint TextureManager::LoadTexture(const char* filename,ImageSize* imagesize, GLenum image_format, GLint internal_format, GLint level, GLint border)
+GLuint TextureManager::LoadTexture(std::string filename,ImageSize* imagesize, GLenum image_format, GLint internal_format, GLint level, GLint border)
 {
 	GLuint tex = -1;  
     int tmp_bit;  
@@ -53,14 +53,14 @@ GLuint TextureManager::LoadTexture(const char* filename,ImageSize* imagesize, GL
     FIBITMAP *bitmap = NULL;  
     GLBITMAP *glbmp = NULL;  
   
-    fif = FreeImage_GetFileType(filename, 0);  
+	fif = FreeImage_GetFileType(filename.c_str(), 0);  
     if ( FIF_UNKNOWN == fif ) {  
-        fif = FreeImage_GetFIFFromFilename(filename);  
+		fif = FreeImage_GetFIFFromFilename(filename.c_str());  
         if ( FIF_UNKNOWN == fif )  
             return 0;     
     }  
     if ( FreeImage_FIFSupportsReading(fif) )   
-        bitmap = FreeImage_Load(fif, filename, 0);  
+		bitmap = FreeImage_Load(fif, filename.c_str(), 0);  
       
     if ( !bitmap )   
         return 0;  
@@ -75,7 +75,7 @@ GLuint TextureManager::LoadTexture(const char* filename,ImageSize* imagesize, GL
     glBindTexture(GL_TEXTURE_2D, tex);  
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);  
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);  
-    glTexImage2D(GL_TEXTURE_2D, 0, glbmp->rgb_mode, glbmp->w, glbmp->h, 0, glbmp->rgb_mode, GL_UNSIGNED_BYTE, glbmp->buf);  
+	glTexImage2D(GL_TEXTURE_2D, 0, glbmp->rgb_mode, glbmp->w, glbmp->h, 0, glbmp->rgb_mode, GL_UNSIGNED_BYTE, glbmp->buf);  
 	imagesize->width=glbmp->w;
 	imagesize->heigth=glbmp->h;
 	FreeGLBitmap(glbmp);

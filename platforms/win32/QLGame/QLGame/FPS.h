@@ -13,7 +13,6 @@ class FPS
 public:
 	FPS(void);
 	~FPS(void);
-	void ShowFps(bool showflag);//是否显示fps
 	int getframefps();//获取每秒显示了多少帧
 	void Start();//开始计时
 	void Stop();//停止计时
@@ -22,7 +21,6 @@ public:
 	void ReStart();
 	DWORD gettick();
 private:
-	bool show;//是否显示fps;
 	bool _start;//是否开始计时;
 	DWORD _starttime;//开始时间
 	DWORD _starttimecopy;
